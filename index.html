@@ -1,201 +1,196 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html>
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
+    <title>Coming Soon | HiroGuo</title>
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>网站建设中,敬请期待...</title>
-    <link rel="stylesheet" type="text/css" href="css/styleload.css" >
-    <link rel="stylesheet" type="text/css" href="css/jquery.jgrowl.min.css" >
-
-    <script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
-    <script type="text/javascript" src="js/sketch.min.js"></script>
-    <script type="text/javascript" src="js/PisualFumikaLogin.js"></script>
-
-    <!--[if lte IE 8]><style>.main{display:none;} .support-note .note-ie{display:block;}</style><![endif]-->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <link rel="stylesheet" href="css/style.css" />
+    <!--[if lt IE 8]>
+    <div class="m-browser-mask"></div>
+    <div class='m-browser-box'>
+        <div class="title">亲，您的浏览器过于陈旧，无法呈现HTML5完美效果。</div>
+        <div class="subtitle">我们建议您使用以下现代浏览器的最新版本。</div>
+        <ul class="list">
+            <li><a title='谷歌Chrome浏览器' href="http://www.google.cn/chrome/" target='_blank'>
+                <span class="i-chrome"></span>
+                <span class="text">谷歌Chrome浏览器</span>
+            </a></li>
+            <li><a title='火狐浏览器' href="http://www.firefox.com.cn/download/" target='_blank'>
+                <span class="i-firefox"></span>
+                <span class="text">火狐浏览器</span>
+            </a></li>
+            <li><a title='Safar浏览器' href="http://w.x.baidu.com/alading/anquan_soft_down_normal/12966" target='_blank'>
+                <span class="i-safari"></span>
+                <span class="text">Safari浏览器</span>
+            </a></li>
+        </ul>
+    </div>
+    <![endif]-->
 </head>
-<body id="body">
+
+<body>
+<div style="display:none">
+    <script type="text/javascript">
+        var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1254080863'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1254080863' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+</div>
+<div class="wrap" id="wrap">
+    <div class="section-box" >
+        <div class="m-comingsoon">
+            <div class="text">Coming Soon | HiroGuo</div>
+            <div class="info">XXXX - XXXXXXX</div>
+        </div>
+        <div class="m-volume-box">
+            <div class="vloume-bar"></div>
+            <div class="vloume-line"></div>
+            <div class="vloume-horn">
+                <div class="inner-mask"></div>
+                <div class="inner"></div>
+            </div>
+        </div>
+        <div class="m-container-box">
+            <div class="container-progress" id="progress">
+            </div>
+            <div class="breathe-radius">
+                <div class="breathe"></div>
+            </div>
+            <div class="container-controls">
+                <div class="controls-normal"></div>
+                <div class="controls-play" >play</div>
+                <div class="controls-pause">pause</div>
+            </div>
+            <div class="controls-next">next</div>
+        </div>
+    </div>
+</div>
+<div id="jquery-jplayer-1"></div>
+<script type="text/javascript"src="js/lib/jquery-1.11.1.min.js"></script>
+
+<!--three.js-->
+<script src="js/lib/three.min.js"></script>
+<script src="js/lib/renderers/Projector.js"></script>
+<script src="js/lib/renderers/CanvasRenderer.js"></script>
+<script src="js/lib/stats.min.js"></script>
+
+<!--jplayer.js-->
+<script type="text/javascript" src="js/lib/jquery.jplayer.min.js"></script>
+<script type="text/javascript" src="js/music.player.js?2"></script>
+
+<script src="js/particle.js?2"></script>
 
 <script>
-    function CloseMouseEffects() {
-        demo.mousemove = function() {
-        };
-    }
+    (function(){
 
-    function OpenMouseEffects() {
+        //背景
+        var particle = new CreateParticle();
 
-        demo.mousemove = function() {
+        //音乐
+        var myMusicPlayer = new MusicPlayer('#jquery-jplayer-1',
+                {
+                    swfPath: 'js',
+                    wmode: 'window',
+                    keyEnabled: false
+                });
 
-            var particle, theta, force, touch, max, i, j, n;
+        //音量调节
+        if('ontouchstart' in window){
+            //mobile
+            var t = 0;
+            var y = 0;
+            $('.vloume-horn .inner-mask').on('touchstart',function(e){
+                $('.m-volume-box').addClass('hidden');
+                var h = $(this).height()/2;
+                $(document).on('touchmove',function(e){
+                    t = e.originalEvent.changedTouches[0].clientY;
+                    var r = t - $(".vloume-horn").offset().top;
+                    y = h - r;
+                    if(y < -34.5){
+                        y = -34.5;
+                    }else if(y > 34.5){
+                        y = 34.5;
+                    }
+                    $('.vloume-line').css({
+                        '-webkit-transform' : 'translate(0, '+ y +'px)',
+                        'transform' : 'translate(0, '+ y +'px)'
+                    });
+                    $("#jquery-jplayer-1").jPlayer('volume', 0.5+y/100);
+                })
+                        .on('touchsend',function(){
+                            $(document).off('touchmove touchsend',null);
+                        });
+                return false;
+            });
 
-            for (i = 0, n = demo.touches.length; i < n; i++) {
+            $('.m-volume-box').on('touchend',function(e){
+                $(this).removeClass('hidden');
+                e.stopPropagation();
+            });
 
-                touch = demo.touches[i], max = random(1, 4);
-                for (j = 0; j < max; j++) {
-                    demo.spawn(touch.x, touch.y);
-                }
+        }else{
+            //PC
+            $('.m-volume-box').hover(function(e){
+                $(this).addClass('hidden');
+            },function(e){
+                $(this).removeClass('hidden');
+            });
+            var t = 0;
+            var y = 0;
+            $('.vloume-horn .inner-mask').on('mousedown',function(e){
+                var h = $(this).height()/2;
+                $(document).on('mousemove',function(e){
+                    t = e.clientY;
+                    var r = t - $(".vloume-horn").offset().top;
+                    y = h - r;
+                    if(y < -34.5){
+                        y = -34.5;
+                    }else if(y > 34.5){
+                        y = 34.5;
+                    }
+                    $('.vloume-line').css({
+                        '-webkit-transform' : 'translate(0, '+ y +'px)',
+                        'transform' : 'translate(0, '+ y +'px)'
+                    });
+                    $("#jquery-jplayer-1").jPlayer('volume', 0.5+y/100);
+                })
+                        .on('mouseup',function(){
+                            $(document).off('mousemove mouseup',null);
+                        });
+                return false;
+            });
+        }
 
+
+        //适配
+        var checkWindow = function(){
+            var winWidth = $(window).width();
+            if (winWidth <= 480) {
+                $('.section-box').addClass('shrink');
+                $('.section-box').removeClass('move');
+            }else if (winWidth < 800) {
+                $('.section-box').addClass('move');
+                $('.section-box').removeClass('shrink');
+            }else {
+                $('.section-box').removeClass('move shrink');
             }
-        };
-
-    }
-
-    function ChangeBackgroundWhite()
-    {
-
-        document.getElementById("body").style.background="#ddd url(images/bg.jpg) repeat top left";
-    }
-
-    function ChangeBackgroundBlack()
-    {
-
-        document.getElementById("body").style.background="#ddd url(images/egg_shell.png) repeat top left";
-    }
-
+        }
+        checkWindow();
+        $(window).on('resize', checkWindow);
+    })();
 </script>
 
-<div id="test" style=" position:fixed;top:0px;z-index:20;"></div>
-
-
-
+<!--Analytics-->
 <script>
-    // ----------------------------------------
-    // Particle
-    // ----------------------------------------
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-    function Particle(x, y, radius) {
-        this.init(x, y, radius);
-    }
-
-    Particle.prototype = {
-
-        init : function(x, y, radius) {
-
-            this.alive = true;
-
-            this.radius = radius || 10;
-            this.wander = 0.15;
-            this.theta = random(TWO_PI);
-            this.drag = 0.92;
-            this.color = '#fff';
-
-            this.x = x || 0.0;
-            this.y = y || 0.0;
-
-            this.vx = 0.0;
-            this.vy = 0.0;
-        },
-
-        move : function() {
-
-            this.x += this.vx;
-            this.y += this.vy;
-
-            this.vx *= this.drag;
-            this.vy *= this.drag;
-
-            this.theta += random(-0.5, 0.5) * this.wander;
-            this.vx += sin(this.theta) * 0.1;
-            this.vy += cos(this.theta) * 0.1;
-
-            this.radius *= 0.96;
-            this.alive = this.radius > 0.5;
-        },
-
-        draw : function(ctx) {
-
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.radius, 0, TWO_PI);
-            ctx.fillStyle = this.color;
-            ctx.fill();
-        }
-    };
-
-    // ----------------------------------------
-    // Example
-    // ----------------------------------------
-
-    var MAX_PARTICLES = 280;
-    var COLOURS = [ '#69D2E7', '#A7DBD8', '#E0E4CC', '#F38630', '#FA6900',
-        '#FF4E50', '#F9D423' ];
-
-    var particles = [];
-    var pool = [];
-
-    var demo = Sketch.create({
-        container : document.getElementById('test')
-    });
-
-    demo.setup = function() {
-
-        // Set off some initial particles.
-        var i, x, y;
-
-        //  for ( i = 0; i < 20; i++ ) {
-        x = (demo.width * 0.5) + random(-100, 100);
-        y = (demo.height * 0.5) + random(-100, 100);
-        demo.spawn(0, 999);
-        // }
-    };
-
-    demo.spawn = function(x, y) {
-
-        if (particles.length >= MAX_PARTICLES)
-            pool.push(particles.shift());
-
-        particle = pool.length ? pool.pop() : new Particle();
-        particle.init(x, y, random(5, 40));
-
-        particle.wander = random(0.5, 2.0);
-        particle.color = random(COLOURS);
-        particle.drag = random(0.9, 0.99);
-
-        theta = random(TWO_PI);
-        force = random(2, 8);
-
-        particle.vx = sin(theta) * force;
-        particle.vy = cos(theta) * force;
-
-        particles.push(particle);
-    };
-
-    demo.update = function() {
-
-        var i, particle;
-
-        for (i = particles.length - 1; i >= 0; i--) {
-
-            particle = particles[i];
-
-            if (particle.alive)
-                particle.move();
-            else
-                pool.push(particles.splice(i, 1)[0]);
-        }
-    };
-
-    demo.draw = function() {
-
-        demo.globalCompositeOperation = 'lighter';
-
-        for ( var i = particles.length - 1; i >= 0; i--) {
-            particles[i].draw(demo);
-        }
-    };
-
-    demo.mousemove = function() {
-
-        var particle, theta, force, touch, max, i, j, n;
-
-        for (i = 0, n = demo.touches.length; i < n; i++) {
-
-            touch = demo.touches[i], max = random(1, 4);
-            for (j = 0; j < max; j++) {
-                demo.spawn(touch.x, touch.y);
-            }
-
-        }
-    };
+    ga('create', 'UA-58519396-1', 'auto');
+    ga('send', 'pageview');
 </script>
-
 </body>
 </html>
